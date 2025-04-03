@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Form with Timer</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        #timer { font-size: 24px; font-weight: bold; margin: 20px; }
+        iframe { width: 100%; height: 80vh; border: none; }
+    </style>
+</head>
+<body>
+
+    <h2>Complete the Form Before Time Runs Out</h2>
+    <div id="timer">Time left: <span id="time">5:00</span></div>
+
+    <!-- Embed Google Form -->
+    <iframe id="googleForm" src="https://docs.google.com/forms/d/e/1FAIpQLSdrLrUxloqfgG59-L2VRqDQe9q6eq8Hwth4LI4zHFkq6VqsyQ/viewform?usp=preview"></iframe>
+
+    <script>
+        $(document).ready(function () {
+            let timeLeft = 50; // Set time limit (in seconds)
+
+            function updateTimer() {
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                seconds = seconds < 10 ? '0' + seconds : seconds;
+                $("#time").text(minutes + ":" + seconds);
+
+                if (timeLeft <= 0) {
+                    alert("Time is up! Submitting form...");
+                    window.location.href = "https://www.google.com"; // Redirect or close tab
+                } else {
+                    timeLeft--;
+                    setTimeout(updateTimer, 1000);
+                }
+            }
+
+            updateTimer();
+        });
+    </script>
+
+</body>
+</html>
