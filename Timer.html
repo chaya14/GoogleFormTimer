@@ -18,6 +18,17 @@
 
     <!-- Embed Google Form -->
     <iframe id="googleForm" src="https://docs.google.com/forms/d/e/1FAIpQLSfyShozyKohA2byAN0yepsUZhVGmXigIwJmgebt53W2xk-5Jw/viewform?usp=header"></iframe>
+    <!-- 1-minute Warning Popup -->
+    <div id="warningPopup" style="display:none; position:fixed; top:30%; left:50%; transform:translate(-50%, -50%); background:#fff; padding:20px 30px; box-shadow:0 0 10px rgba(0,0,0,0.3); border-radius:10px; z-index:1000; font-size:18px;">
+        ⚠️ Only 1 minute left! Please finish your form.
+        <br><br>
+        <button onclick="closePopup('warningPopup')" style="padding:5px 15px;">OK</button>
+    </div>
+    
+    <!-- Time's Up Popup -->
+    <div id="timeoutPopup" style="display:none; position:fixed; top:30%; left:50%; transform:translate(-50%, -50%); background:#fff; padding:20px 30px; box-shadow:0 0 10px rgba(0,0,0,0.3); border-radius:10px; z-index:1000; font-size:18px;">
+        ⏰ Time is up! Submitting form...
+    </div>
 
    <script>
     let warned = false;
@@ -42,14 +53,18 @@
         $("#time").text(minutes + ":" + seconds);
 
         if (timeLeft === 60 && !warned) {
-            alert("⚠️ Only 1 minute left! Please finish your form.");
+            showPopup("warningPopup");
             warned = true;
         }
 
         if (timeLeft <= 0) {
-            alert("⏰ Time is up! Submitting form...");
+            showPopup("timeoutPopup");
+            setTimeout(() => {
             localStorage.removeItem(storageKey); // Clear storage
-            window.location.href = "https://chaya14.github.io/GoogleFormTimer/ThankYou.html"; // Or custom action
+            window.location.href = "https://chaya14.github.io/GoogleFormTimer/ThankYou.html"; // Redirect after 5 seconds
+        }, 5000);
+            //localStorage.removeItem(storageKey); // Clear storage
+            //window.location.href = "https://chaya14.github.io/GoogleFormTimer/ThankYou.html"; // Or custom action
         } else {
             setTimeout(updateTimer, 1000);
         }
@@ -63,6 +78,13 @@
         }
         updateTimer();
     };
+    function showPopup(id) {
+        document.getElementById(id).style.display = "block";
+    }
+
+    function closePopup(id) {
+        document.getElementById(id).style.display = "none";
+    }
 </script>
 
 
