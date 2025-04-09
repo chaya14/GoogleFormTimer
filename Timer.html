@@ -14,14 +14,14 @@
 <body>
 
     <h2>Complete the Form Before Time Runs Out</h2>
-    <div id="timer">Time left: <span id="time">5:00</span></div>
+    <div id="timer">Time left: <span id="time"></span></div>
 
     <!-- Embed Google Form -->
     <iframe id="googleForm" src="https://docs.google.com/forms/d/e/1FAIpQLSfyShozyKohA2byAN0yepsUZhVGmXigIwJmgebt53W2xk-5Jw/viewform?usp=header"></iframe>
 
    <script>
     let warned = false;
-    const totalTime = 300; // 5 minutes in seconds
+    const totalTime = 120; // 5 minutes in seconds
     const storageKey = "formEndTime";
 
     function getTimeLeft() {
