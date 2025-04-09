@@ -20,26 +20,31 @@
     <iframe id="googleForm" src="https://forms.gle/qucnzhZjeufj9eaVA"></iframe>
 
     <script>
-        $(document).ready(function () {
-            let timeLeft = 10; // Set time limit (in seconds)
+        let timerStarted = false;
+        let timeLeft = 60; // 5 minutes in seconds
 
-            function updateTimer() {
-                let minutes = Math.floor(timeLeft / 60);
-                let seconds = timeLeft % 60;
-                seconds = seconds < 10 ? '0' + seconds : seconds;
-                $("#time").text(minutes + ":" + seconds);
+        function updateTimer() {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            $("#time").text(minutes + ":" + seconds);
 
-                if (timeLeft <= 0) {
-                    alert("Time is up! Submitting form...");
-                    window.location.href = "https://www.google.com"; // Redirect or close tab
-                } else {
-                    timeLeft--;
-                    setTimeout(updateTimer, 1000);
-                }
+            if (timeLeft <= 0) {
+                alert("Time is up! Submitting form...");
+                window.location.href = "https://www.google.com"; // Redirect or close tab
+            } else {
+                timeLeft--;
+                setTimeout(updateTimer, 1000);
             }
+        }
 
-            updateTimer();
-        });
+        // Start timer when iframe is fully loaded
+        document.getElementById("googleForm").onload = function () {
+            if (!timerStarted) {
+                timerStarted = true;
+                updateTimer();
+            }
+        };
     </script>
 
 </body>
