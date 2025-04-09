@@ -19,39 +19,52 @@
     <!-- Embed Google Form -->
     <iframe id="googleForm" src="https://docs.google.com/forms/d/e/1FAIpQLSfyShozyKohA2byAN0yepsUZhVGmXigIwJmgebt53W2xk-5Jw/viewform?usp=header"></iframe>
 
-    <script>
-        let timerStarted = false;
-        let timeLeft = 300; // 5 minutes in seconds
-        let warned = false;
+   <script>
+    let warned = false;
+    const totalTime = 300; // 5 minutes in seconds
+    const storageKey = "formEndTime";
 
-        function updateTimer() {
-            let minutes = Math.floor(timeLeft / 60);
-            let seconds = timeLeft % 60;
-            seconds = seconds < 10 ? '0' + seconds : seconds;
-            $("#time").text(minutes + ":" + seconds);
+    function getTimeLeft() {
+        const endTime = localStorage.getItem(storageKey);
+        if (endTime) {
+            const now = Math.floor(Date.now() / 1000);
+            return Math.max(0, endTime - now);
+        }
+        return totalTime;
+    }
 
-            if (timeLeft === 60 && !warned) {
-                alert("⚠️ Only 1 minute left! Please finish your form.");
-                warned = true;
-            }
+    function updateTimer() {
+        let timeLeft = getTimeLeft();
 
-            if (timeLeft <= 0) {
-                alert("⏰ Time is up! Submitting form...");
-                window.location.href = "https://www.google.com"; // You can replace with your custom action
-            } else {
-                timeLeft--;
-                setTimeout(updateTimer, 1000);
-            }
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+        $("#time").text(minutes + ":" + seconds);
+
+        if (timeLeft === 60 && !warned) {
+            alert("⚠️ Only 1 minute left! Please finish your form.");
+            warned = true;
         }
 
-        // Start timer when iframe is fully loaded
-        document.getElementById("googleForm").onload = function () {
-            if (!timerStarted) {
-                timerStarted = true;
-                updateTimer();
-            }
-        };
-    </script>
+        if (timeLeft <= 0) {
+            alert("⏰ Time is up! Submitting form...");
+            localStorage.removeItem(storageKey); // Clear storage
+            window.location.href = "https://www.google.com"; // Or custom action
+        } else {
+            setTimeout(updateTimer, 1000);
+        }
+    }
+
+    // Start timer when iframe is fully loaded
+    document.getElementById("googleForm").onload = function () {
+        if (!localStorage.getItem(storageKey)) {
+            const endTime = Math.floor(Date.now() / 1000) + totalTime;
+            localStorage.setItem(storageKey, endTime);
+        }
+        updateTimer();
+    };
+</script>
+
 
 </body>
 </html>
