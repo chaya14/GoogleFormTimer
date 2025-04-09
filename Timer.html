@@ -21,7 +21,8 @@
 
     <script>
         let timerStarted = false;
-        let timeLeft = 200; // 5 minutes in seconds
+        let timeLeft = 300; // 5 minutes in seconds
+        let warned = false;
 
         function updateTimer() {
             let minutes = Math.floor(timeLeft / 60);
@@ -29,9 +30,14 @@
             seconds = seconds < 10 ? '0' + seconds : seconds;
             $("#time").text(minutes + ":" + seconds);
 
+            if (timeLeft === 60 && !warned) {
+                alert("⚠️ Only 1 minute left! Please finish your form.");
+                warned = true;
+            }
+
             if (timeLeft <= 0) {
-                alert("Time is up! Submitting form...");
-                window.location.href = "https://www.google.com"; // Redirect or close tab
+                alert("⏰ Time is up! Submitting form...");
+                window.location.href = "https://www.google.com"; // You can replace with your custom action
             } else {
                 timeLeft--;
                 setTimeout(updateTimer, 1000);
